@@ -72,15 +72,6 @@ import { Currency, SettingsService } from '../../core/services/settings.service'
 						</div>
 					</div>
 
-					<mat-divider></mat-divider>
-
-					<div class="style-isolation-test">
-						<h3>樣式隔離測試 (Style Isolation)</h3>
-						<p class="isolated-text">
-							這段文字的顏色只會在設定頁面中被覆寫為藍色，
-							證明 Angular Component 的 View Encapsulation 正確運作。
-						</p>
-					</div>
 				</mat-card-content>
 			</mat-card>
 		</div>
@@ -146,25 +137,6 @@ import { Currency, SettingsService } from '../../core/services/settings.service'
 			mat-form-field {
 				width: 100%;
 				margin-bottom: -1.25em;
-			}
-
-			.style-isolation-test {
-				margin-top: 2rem;
-				padding: 1rem;
-				border: 1px dashed #ccc;
-				border-radius: 4px;
-				background-color: rgba(0, 0, 0, 0.02);
-			}
-
-			.style-isolation-test h3 {
-				margin-top: 0;
-				font-size: 1rem;
-				color: #555;
-			}
-
-			.isolated-text {
-				color: #2196f3;
-				font-weight: bold;
 			}
 		`
 	]
