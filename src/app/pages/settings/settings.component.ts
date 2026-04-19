@@ -1,4 +1,4 @@
-import { Component, effect, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -7,7 +7,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
-import { SettingsService } from '../../core/services/settings.service';
+import { Currency, SettingsService } from '../../core/services/settings.service';
 
 @Component({
 	selector: 'app-settings',
@@ -33,14 +33,14 @@ import { SettingsService } from '../../core/services/settings.service';
 				<mat-card-content>
 					<div class="setting-item">
 						<div class="setting-icon">
-							<mat-icon>{{ isDarkMode ? 'dark_mode' : 'light_mode' }}</mat-icon>
+							<mat-icon>{{ isDarkMode() ? 'dark_mode' : 'light_mode' }}</mat-icon>
 						</div>
 						<div class="setting-details">
 							<h3>深色模式</h3>
 							<p>啟用深色背景以減輕眼睛疲勞</p>
 						</div>
 						<div class="setting-action">
-							<mat-slide-toggle [checked]="isDarkMode" (change)="toggleTheme($event.checked)"></mat-slide-toggle>
+							<mat-slide-toggle [checked]="isDarkMode()" (change)="toggleTheme($event.checked)"></mat-slide-toggle>
 						</div>
 					</div>
 
@@ -57,7 +57,7 @@ import { SettingsService } from '../../core/services/settings.service';
 						<div class="setting-action">
 							<mat-form-field appearance="outline">
 								<mat-label>選擇貨幣</mat-label>
-								<mat-select [value]="currentCurrency" (selectionChange)="updateCurrency($event.value)">
+								<mat-select [value]="currentCurrency()" (selectionChange)="updateCurrency($event.value)">
 									<mat-option value="TWD">新台幣 (TWD)</mat-option>
 									<mat-option value="USD">美金 (USD)</mat-option>
 									<mat-option value="JPY">日圓 (JPY)</mat-option>
@@ -170,28 +170,28 @@ import { SettingsService } from '../../core/services/settings.service';
 	]
 })
 export class SettingsComponent {
-	private settingsService = inject(SettingsService);
+	private readonly settingsService = inject(SettingsService);
 
-	isDarkMode = this.settingsService.settings().theme === 'dark';
-	currentCurrency = this.settingsService.settings().defaultCurrency;
-
-	constructor() {
-		effect(() => {
-			const settings = this.settingsService.settings();
-			this.isDarkMode = settings.theme === 'dark';
-			this.currentCurrency = settings.defaultCurrency;
-		});
-	}
+	readonly isDarkMode = computed(() => this.settingsService.settings().theme === 'dark');
+	readonly currentCurrency = computed(() => this.settingsService.settings().defaultCurrency);
 
 	toggleTheme(checked: boolean): void {
+		if (this.isDarkMode() === checked) {
+			return;
+		}
+
 		this.settingsService.updateSettings({
 			theme: checked ? 'dark' : 'light'
 		});
 	}
 
-	updateCurrency(currency: string): void {
+	updateCurrency(currency: Currency): void {
+		if (this.currentCurrency() === currency) {
+			return;
+		}
+
 		this.settingsService.updateSettings({
-			defaultCurrency: currency as never
+			defaultCurrency: currency
 		});
 	}
 }
