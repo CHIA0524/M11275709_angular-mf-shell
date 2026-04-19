@@ -1,0 +1,64 @@
+<mat-sidenav-container class="shell-container">
+  <mat-sidenav mode="side" opened class="sidenav">
+    <div class="sidenav-header">
+      <mat-icon class="app-icon">account_balance_wallet</mat-icon>
+      <h2>財務管理</h2>
+      <p class="version">v1.0.0 Microfrontends</p>
+    </div>
+
+    <mat-nav-list>
+      @for (item of menuItems; track item.route) {
+      <a
+        mat-list-item
+        [routerLink]="item.route"
+        [class.active]="isActive(item.route)"
+        class="nav-item"
+      >
+        <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+        <div matListItemTitle>{{ item.label }}</div>
+        @if (item.description) {
+        <div matListItemLine class="item-description">
+          {{ item.description }}
+        </div>
+        }
+      </a>
+      }
+    </mat-nav-list>
+
+    <div class="sidenav-footer">
+      <div class="architecture-badge">
+        <mat-icon>architecture</mat-icon>
+        <span>Native Federation 微前端</span>
+      </div>
+    </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <mat-toolbar color="primary" class="toolbar">
+      <span class="toolbar-title">財務管理系統</span>
+
+      <span class="spacer"></span>
+
+      @if (currentUser) {
+      <button mat-button [matMenuTriggerFor]="userMenu" class="user-button">
+        <mat-icon>account_circle</mat-icon>
+        <span>{{ currentUser.displayName }}</span>
+        <mat-icon>arrow_drop_down</mat-icon>
+      </button>
+      }
+
+      <mat-menu #userMenu="matMenu">
+        <div class="user-menu-header">
+          <mat-icon>person</mat-icon>
+          <div class="user-info">
+            <div class="user-name">{{ currentUser?.displayName }}</div>
+          </div>
+        </div>
+      </mat-menu>
+    </mat-toolbar>
+
+    <div class="content">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

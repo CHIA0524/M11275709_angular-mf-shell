@@ -1,0 +1,77 @@
+<div class="converter-container" style="max-width: 600px; margin: 2rem auto">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>匯率計算機</mat-card-title>
+      <mat-card-subtitle>快速換算不同貨幣</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-form-field
+        appearance="fill"
+        style="width: 100%; margin-bottom: 1rem"
+      >
+        <mat-label>來源貨幣</mat-label>
+        <mat-select
+          [(ngModel)]="baseCurrency"
+          (selectionChange)="onBaseCurrencyChange()"
+        >
+          <mat-option
+            *ngFor="let curr of availableCurrencies"
+            [value]="curr.code"
+          >
+            {{ curr.code }} - {{ curr.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field
+        appearance="fill"
+        style="width: 100%; margin-bottom: 1rem"
+      >
+        <mat-label>金額</mat-label>
+        <input
+          matInput
+          type="number"
+          [(ngModel)]="amount"
+          (ngModelChange)="convert()"
+          min="0"
+        />
+      </mat-form-field>
+
+      <mat-form-field
+        appearance="fill"
+        style="width: 100%; margin-bottom: 1rem"
+      >
+        <mat-label>目標貨幣</mat-label>
+        <mat-select [(ngModel)]="targetCurrency" (selectionChange)="convert()">
+          <mat-option
+            *ngFor="let curr of availableCurrencies"
+            [value]="curr.code"
+          >
+            {{ curr.code }} - {{ curr.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div
+        class="result"
+        *ngIf="convertedAmount !== null"
+        style="margin-top: 1rem; text-align: center; font-size: 1.5rem"
+      >
+        <span style="color: #666"
+          >{{ amount | number : "1.2-2" }} {{ baseCurrency }} =
+        </span>
+        <span style="font-weight: bold; color: #3f51b5"
+          >{{ convertedAmount | number : "1.2-2" }} {{ targetCurrency }}</span
+        >
+      </div>
+
+      <div
+        class="loading"
+        *ngIf="loading"
+        style="text-align: center; margin-top: 1rem"
+      >
+        <p>更新匯率中...</p>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
