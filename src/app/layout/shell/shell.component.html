@@ -1,0 +1,91 @@
+<mat-sidenav-container class="shell-container">
+  <mat-sidenav mode="side" opened class="sidenav">
+    <div class="sidenav-header">
+      <mat-icon class="app-icon">account_balance_wallet</mat-icon>
+      <h2>{{ t("shell.appName") }}</h2>
+      <p class="version">{{ t("shell.versionMicrofrontends") }}</p>
+    </div>
+
+    <mat-nav-list>
+      @for (item of menuItems; track item.route) {
+        <a
+          mat-list-item
+          [routerLink]="item.route"
+          [class.active]="isActive(item.route)"
+          class="nav-item"
+        >
+          <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+          <div matListItemTitle>{{ t(item.labelKey) }}</div>
+          @if (item.descriptionKey) {
+            <div matListItemLine class="item-description">
+              {{ t(item.descriptionKey) }}
+            </div>
+          }
+        </a>
+      }
+    </mat-nav-list>
+
+    <div class="sidenav-footer">
+      <div class="architecture-badge">
+        <mat-icon>architecture</mat-icon>
+        <span>{{ t("shell.architectureMicrofrontends") }}</span>
+      </div>
+    </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <mat-toolbar color="primary" class="toolbar">
+      <span class="toolbar-title">{{ t("shell.systemTitle") }}</span>
+
+      <span class="spacer"></span>
+
+      <button
+        mat-stroked-button
+        [matMenuTriggerFor]="languageMenu"
+        class="language-button"
+      >
+        <mat-icon>translate</mat-icon>
+        <span>{{ currentLanguageLabel() }}</span>
+      </button>
+
+      @if (currentUser) {
+        <button mat-button [matMenuTriggerFor]="userMenu" class="user-button">
+          <mat-icon>account_circle</mat-icon>
+          <span>{{ currentUser.displayName }}</span>
+          <mat-icon>arrow_drop_down</mat-icon>
+        </button>
+      }
+
+      <mat-menu #userMenu="matMenu">
+        <div class="user-menu-header">
+          <mat-icon>person</mat-icon>
+          <div class="user-info">
+            <div class="user-name">{{ currentUser?.displayName }}</div>
+          </div>
+        </div>
+      </mat-menu>
+
+      <mat-menu #languageMenu="matMenu">
+        @for (language of supportedLanguages; track language.code) {
+          <button
+            mat-menu-item
+            (click)="setLanguage(language.code)"
+            class="language-option"
+          >
+            <div class="language-option-copy">
+              <span>{{ language.nativeLabel }}</span>
+              <span class="language-meta">{{ language.englishLabel }}</span>
+            </div>
+            @if (language.code === currentLanguage()) {
+              <mat-icon>check</mat-icon>
+            }
+          </button>
+        }
+      </mat-menu>
+    </mat-toolbar>
+
+    <div class="content">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

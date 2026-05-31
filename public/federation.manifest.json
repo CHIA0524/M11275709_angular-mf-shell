@@ -1,0 +1,6 @@
+{
+	"dashboard": "http://localhost:4201/remoteEntry.json",
+	"bookkeeping": "http://localhost:4202/remoteEntry.json",
+	"currency-converter": "http://localhost:4203/remoteEntry.json",
+	"settings": "http://localhost:4204/remoteEntry.json"
+}
