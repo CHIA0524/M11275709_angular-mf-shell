@@ -73,6 +73,7 @@ export class ShellComponent implements OnInit {
     this.authService.currentUser$.subscribe(user => {
       this.currentUser = user;
     });
+    console.log('test')
   }
 
   isActive(route: string): boolean {
